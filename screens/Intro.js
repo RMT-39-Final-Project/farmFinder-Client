@@ -5,15 +5,11 @@ import {
   Poppins_300Light,
   Poppins_600SemiBold,
 } from "@expo-google-fonts/poppins";
-import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
 import vector from "../assets/intro.png";
 import Button from "../components/button";
+import SafeArea from "./SafeArea";
 
 const Intro = ({ navigation }) => {
-  const insets = useSafeAreaInsets();
   let [fontsLoaded, fontError] = useFonts({
     Poppins_300Light,
     Poppins_600SemiBold,
@@ -24,40 +20,31 @@ const Intro = ({ navigation }) => {
   }
 
   return (
-    <SafeAreaProvider>
-      <View
-        style={{
-          flex: 1,
-          paddingTop: insets.top,
-          paddingBottom: insets.bottom,
-          paddingHorizontal: 15,
-          alignItems: "center",
-        }}
-      >
-        <View style={styles.image}>
-          <Image source={vector} style={styles.vector} />
-          <Text style={styles.title}>
-            Start your{" "}
-            <Text style={{ fontFamily: "Poppins_600SemiBold" }}>journey</Text>
-            {"\n"} and become what you{" "}
-            <Text style={{ fontFamily: "Poppins_600SemiBold" }}>want</Text> to
-            be
-          </Text>
-        </View>
+    <SafeArea>
+      <View style={styles.image}>
+        <Image source={vector} style={styles.vector} />
+        <Text style={styles.title}>
+          Start your{" "}
+          <Text style={{ fontFamily: "Poppins_600SemiBold" }}>journey</Text>
+          {"\n"} and become what you{" "}
+          <Text style={{ fontFamily: "Poppins_600SemiBold" }}>want</Text> to be
+        </Text>
+      </View>
+      <View style={{ flex: 0.1 }}>
         <Button
           text={"Be a Investor"}
-          screen={"registerInvest"}
-          navigation={navigation}
+          pres={() => navigation.navigate("loginInvest")}
           bg={"#296F63"}
         />
+      </View>
+      <View style={{ flex: 0.1 }}>
         <Button
           text={"Be a Farmer"}
-          screen={"registerFarmer"}
-          navigation={navigation}
+          pres={() => navigation.navigate("registerFarmer")}
           bg={"#A5D255"}
         />
       </View>
-    </SafeAreaProvider>
+    </SafeArea>
   );
 };
 

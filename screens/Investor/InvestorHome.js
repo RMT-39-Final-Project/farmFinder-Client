@@ -1,10 +1,11 @@
 import React from "react";
 import { View, StyleSheet, Text } from "react-native";
+import { TextField } from "@mui/material";
 
 const InvestorHome = () => {
   return (
     <View>
-      <Text>InvestorHome</Text>
+      <Text>home</Text>
     </View>
   );
 };
