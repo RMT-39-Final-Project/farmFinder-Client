@@ -3,7 +3,10 @@ import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Intro from "./screens/Intro";
-import Home from "./screens/Home";
+import InvestorHome from "./screens/Investor/InvestorHome";
+import FarmerHome from "./screens/Farmer/FarmerHome";
+import registerInvestor from "./screens/Investor/register";
+import registerFarmer from "./screens/Farmer/register";
 
 const Stack = createNativeStackNavigator();
 
@@ -17,8 +20,13 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="Home"
-          component={Home}
+          name="registerInvest"
+          component={registerInvestor}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="registerFarmer"
+          component={registerFarmer}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
