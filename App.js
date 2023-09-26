@@ -1,36 +1,53 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Intro from "./screens/Intro";
-import Home from "./screens/Home";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import Investments from "./screens/FarmerScreens/Investments";
+import Profile from "./screens/FarmerScreens/Profile";
+import MainStack from "./navigators/MainStack";
+import { FontAwesome, AntDesign, Entypo } from "@expo/vector-icons";
 
-const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Intro"
-          component={Intro}
-          options={{ headerShown: false }}
+      <Tab.Navigator
+        initialRouteName="Home" 
+      >
+        <Tab.Screen
+          name="Investments"
+          component={Investments}
+          options={{
+            tabBarIcon: ({ focused, color, size }) => {
+              return <Entypo name="documents" size={24} color="black" />;
+            },
+            tabBarLabel: "Investments",
+          }}
         />
-        <Stack.Screen
+        <Tab.Screen
           name="Home"
-          component={Home}
-          options={{ headerShown: false }}
+          component={MainStack}
+          options={{
+            tabBarIcon: ({ focused, color, size }) => {
+              return <FontAwesome name="home" size={24} color="black" />;
+            },
+            headerShown: false,
+          }}
         />
-      </Stack.Navigator>
+        <Tab.Screen
+          name="Profile"
+          component={Profile}
+          options={{
+            tabBarIcon: ({ focused, color, size }) => {
+              return <AntDesign name="profile" size={24} color="black" />;
+            },
+            tabBarLabel: "Profile",
+          }}
+        />
+      </Tab.Navigator>
+      <StatusBar style="auto" />
     </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});

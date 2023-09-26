@@ -2,16 +2,16 @@ import React from "react";
 import { View, StyleSheet, Text, SafeAreaView } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
-const Home = () => {
+const Investments = () => {
   return (
     <SafeAreaProvider>
-      <View>
-        <Text>Home</Text>
-      </View>
+      <SafeAreaView>
+        <Text>Investments</Text>
+      </SafeAreaView>
     </SafeAreaProvider>
   );
 };
 
 const styles = StyleSheet.create({});
 
-export default Home;
+export default Investments;
