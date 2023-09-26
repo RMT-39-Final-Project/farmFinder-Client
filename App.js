@@ -15,6 +15,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import InvestorNav from "./components/investorNav";
 import allFarm from "./screens/Investor/allFarm";
+import Navigatio from "./components/navigation";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -35,50 +36,7 @@ export default function App() {
     <PaperProvider>
       <Provider store={store}>
         <NavigationContainer>
-          <Stack.Navigator>
-            {isInvestor ? (
-              <>
-                <Stack.Screen
-                  name="RootInvestor"
-                  component={InvestorNav}
-                  options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                  name="allFarm"
-                  component={allFarm}
-                  options={{ headerShown: false }}
-                />
-              </>
-            ) : (
-              <>
-                <Stack.Screen
-                  name="Intro"
-                  component={Intro}
-                  options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                  name="loginInvest"
-                  component={LoginInvest}
-                  options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                  name="registerInvest"
-                  component={registerInvestor}
-                  options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                  name="registerFarmer"
-                  component={registerFarmer}
-                  options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                  name="loginFarmer"
-                  component={loginFarmer}
-                  options={{ headerShown: false }}
-                />
-              </>
-            )}
-          </Stack.Navigator>
+          <Navigatio />
         </NavigationContainer>
       </Provider>
     </PaperProvider>

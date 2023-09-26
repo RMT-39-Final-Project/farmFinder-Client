@@ -6,6 +6,7 @@ import {
   Pressable,
   FlatList,
   ActivityIndicator,
+  ScrollView,
 } from "react-native";
 import {
   useFonts,
@@ -27,7 +28,6 @@ const InvestorHome = ({ navigation }) => {
   const { farms, loading } = useSelector((state) => {
     return state.farms;
   });
-  console.log(farms, loading);
   const [search, setSearch] = useState("");
   let [fontsLoaded, fontError] = useFonts({
     Poppins_300Light,
@@ -46,7 +46,6 @@ const InvestorHome = ({ navigation }) => {
 
   useEffect(() => {
     dispatch(fetchFarmsSuccess());
-    AsyncStorage.clear().then((res) => console.log(res));
   }, []);
 
   if (!fontsLoaded && !fontError) {
@@ -65,81 +64,118 @@ const InvestorHome = ({ navigation }) => {
 
   return (
     <SafeArea>
-      <View style={{ marginTop: 20, marginBottom: 15 }}>
-        <Text
-          style={{
-            fontSize: 24,
-            fontFamily: "Poppins_700Bold",
-            color: "#767676",
-          }}
-        >
-          Welcome
-        </Text>
-        <Text
-          style={{
-            fontSize: 38,
-            fontFamily: "Poppins_700Bold",
-            marginTop: -15,
-            color: "#296F63",
-          }}
-        >
-          Investor
-        </Text>
-      </View>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "flex-start",
-        }}
-      >
-        <View style={{ flex: 0.77 }}>
-          <Input
-            label={"Search"}
-            bg={"#296F63"}
-            placeholder={"Search by city"}
-            onChangeText={(e) => setSearch(e)}
-          />
+      <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
+        <View style={{ marginTop: 20, marginBottom: 15 }}>
+          <Text
+            style={{
+              fontSize: 24,
+              fontFamily: "Poppins_700Bold",
+              color: "#767676",
+            }}
+          >
+            Welcome
+          </Text>
+          <Text
+            style={{
+              fontSize: 38,
+              fontFamily: "Poppins_700Bold",
+              marginTop: -15,
+              color: "#296F63",
+            }}
+          >
+            Investor
+          </Text>
         </View>
         <View
           style={{
-            marginTop: 7,
-            flex: 0.2,
-            alignItems: "center",
-            backgroundColor: "#296F63",
-            borderColor: "#fff",
-            borderWidth: 1,
-            borderRadius: 5,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
           }}
         >
-          <Pressable
+          <View style={{ flex: 0.77 }}>
+            <Input
+              label={"Search"}
+              bg={"#296F63"}
+              placeholder={"Search by city"}
+              onChangeText={(e) => setSearch(e)}
+            />
+          </View>
+          <View
             style={{
-              paddingHorizontal: 10,
-              paddingVertical: 14,
+              marginTop: 7,
+              flex: 0.2,
+              alignItems: "center",
+              backgroundColor: "#296F63",
+              borderColor: "#fff",
+              borderWidth: 1,
+              borderRadius: 5,
             }}
-            onPress={() => handleSearch()}
+          >
+            <Pressable
+              style={{
+                paddingHorizontal: 10,
+                paddingVertical: 14,
+              }}
+              onPress={() => handleSearch()}
+            >
+              <Text
+                style={{
+                  color: "white",
+                  fontFamily: "Poppins_600SemiBold",
+                }}
+              >
+                Search
+              </Text>
+            </Pressable>
+          </View>
+        </View>
+        <View style={{ marginBottom: 10 }}>
+          <View
+            style={{
+              marginTop: 10,
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              paddingRight: 2,
+            }}
           >
             <Text
               style={{
-                color: "white",
-                fontFamily: "Poppins_600SemiBold",
+                fontSize: 22,
+                fontFamily: "Poppins_500Medium",
+                color: "#767676",
               }}
             >
-              Search
+              Popular Farms
             </Text>
-          </Pressable>
+            <Pressable
+              onPress={() => {
+                navigation.navigate("allFarm");
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 16,
+                  color: "#296F63",
+                  fontFamily: "Poppins_300Light",
+                }}
+              >
+                See all
+              </Text>
+            </Pressable>
+          </View>
+          <View style={{ marginTop: 20 }}>
+            <FlatList
+              showsHorizontalScrollIndicator={false}
+              data={farms}
+              horizontal={true}
+              renderItem={({ item }) => <CardItem item={item} />}
+              keyExtractor={(item) => item.id}
+            />
+          </View>
         </View>
-      </View>
-      <View style={{ marginBottom: 10 }}>
-        <View
-          style={{
-            marginTop: 10,
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            paddingRight: 2,
-          }}
-        >
+        <View style={{ marginTop: 20 }}>
           <Text
             style={{
               fontSize: 22,
@@ -147,68 +183,34 @@ const InvestorHome = ({ navigation }) => {
               color: "#767676",
             }}
           >
-            Popular Farms
+            Categories
           </Text>
-          <Pressable
-            onPress={() => {
-              navigation.navigate("allFarm");
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 16,
-                color: "#296F63",
-                fontFamily: "Poppins_300Light",
-              }}
-            >
-              See all
-            </Text>
-          </Pressable>
+          <View style={{ marginTop: 10 }}>
+            {categoryOptions.map((el, id) => {
+              return (
+                <View
+                  style={{
+                    flex: 1,
+                    backgroundColor: "white",
+                    borderWidth: 1,
+                    borderColor: "#296F63",
+                    marginBottom: 10,
+                    alignItems: "center",
+                    paddingVertical: 15,
+                    borderRadius: 5,
+                  }}
+                >
+                  <Text
+                    style={{ fontSize: 16, fontFamily: "Poppins_500Medium" }}
+                  >
+                    {el}
+                  </Text>
+                </View>
+              );
+            })}
+          </View>
         </View>
-        <View style={{ marginTop: 20 }}>
-          <FlatList
-            data={farms}
-            horizontal={true}
-            renderItem={({ item }) => <CardItem item={item} />}
-            keyExtractor={(item) => item.id}
-          />
-        </View>
-      </View>
-      <View style={{ marginTop: 20 }}>
-        <Text
-          style={{
-            fontSize: 22,
-            fontFamily: "Poppins_500Medium",
-            color: "#767676",
-          }}
-        >
-          Categories
-        </Text>
-        <View style={{ marginTop: 10 }}>
-          <FlatList
-            data={categoryOptions}
-            renderItem={({ item }) => (
-              <View
-                style={{
-                  flex: 1,
-                  backgroundColor: "white",
-                  borderWidth: 1,
-                  borderColor: "#296F63",
-                  marginBottom: 10,
-                  alignItems: "center",
-                  paddingVertical: 15,
-                  borderRadius: 5,
-                }}
-              >
-                <Text style={{ fontSize: 16, fontFamily: "Poppins_500Medium" }}>
-                  {item}
-                </Text>
-              </View>
-            )}
-            keyExtractor={(item) => item.id}
-          />
-        </View>
-      </View>
+      </ScrollView>
     </SafeArea>
   );
 };

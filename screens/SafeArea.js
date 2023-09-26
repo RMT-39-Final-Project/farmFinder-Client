@@ -13,7 +13,7 @@ export default function SafeArea({ children }) {
         style={{
           flex: 1,
           paddingTop: insets.top,
-          paddingBottom: insets.bottom,
+          //   paddingBottom: insets.bottom,
           paddingHorizontal: 15,
         }}
       >

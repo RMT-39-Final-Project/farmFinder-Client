@@ -19,16 +19,6 @@ const Intro = ({ navigation }) => {
     Poppins_600SemiBold,
   });
 
-  //   useEffect(() => {
-  //     AsyncStorage.multiGet(["access_token", "role", "test"]).then((res) => {
-  //       if (res[0][1]) {
-  //         dispatch(fetchInvestorSuccess({}, res[0][1], res[1][1]));
-  //         navigation.navigate("investorHome");
-  //       }
-  //       console.log(res);
-  //     });
-  //   }, []);
-
   if (!fontsLoaded && !fontError) {
     return null;
   }
@@ -51,7 +41,7 @@ const Intro = ({ navigation }) => {
           bg={"#296F63"}
         />
       </View>
-      <View style={{ flex: 0.1 }}>
+      <View style={{ flex: 0.1, marginBottom: 30 }}>
         <Button
           text={"Be a Farmer"}
           pres={() => navigation.navigate("loginFarmer")}

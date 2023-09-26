@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, ScrollView, Pressable } from "react-native";
 import SafeArea from "../SafeArea";
 import {
   useFonts,
@@ -10,8 +10,14 @@ import {
 } from "@expo-google-fonts/poppins";
 import { Roboto_700Bold } from "@expo-google-fonts/roboto";
 import Recent from "../../components/balance/recent";
+import { useSelector } from "react-redux";
+import axios from "axios";
 
-const Balance = () => {
+const Balance = ({ navigation }) => {
+  const [user, setUser] = useState({});
+  const { userId } = useSelector((state) => {
+    return state.user;
+  });
   let [fontsLoaded, fontError] = useFonts({
     Poppins_300Light,
     Poppins_600SemiBold,
@@ -19,13 +25,30 @@ const Balance = () => {
     Poppins_500Medium,
     Roboto_700Bold,
   });
+
+  useEffect(() => {
+    axios
+      .get(
+        "https://114f-180-241-183-225.ngrok-free.app/users/investors/" + userId
+      )
+      .then(({ data }) => setUser(data));
+  }, []);
+
   if (!fontsLoaded && !fontError) {
     return null;
   }
   return (
     <SafeArea>
-      <View style={{ flex: 1, justifyContent: "center" }}>
-        <View style={{ alignItems: "center", marginBottom: 60 }}>
+      {/* <ScrollView> */}
+      <View style={{ justifyContent: "center" }}>
+        <View
+          style={{
+            marginTop: 70,
+            alignItems: "center",
+            marginBottom: 60,
+            justifyContent: "flex-end",
+          }}
+        >
           <Text
             style={{
               fontFamily: "Poppins_300Light",
@@ -42,7 +65,7 @@ const Balance = () => {
               color: "#296F63",
             }}
           >
-            Rp. 3.000.000,00
+            Rp. {user.balance},00
           </Text>
           <View
             style={{
@@ -50,23 +73,26 @@ const Balance = () => {
               overflow: "hidden",
             }}
           >
-            <Text
-              style={{
-                backgroundColor: "#2D6A4F4D",
-                fontSize: 20,
-                paddingHorizontal: 50,
-                paddingVertical: 8,
-                color: "#296F63",
-                marginTop: 20,
-                fontFamily: "Poppins_300Light",
-              }}
-            >
-              Add amount
-            </Text>
+            <Pressable onPress={() => navigation.navigate("topup")}>
+              <Text
+                style={{
+                  backgroundColor: "#2D6A4F4D",
+                  fontSize: 20,
+                  paddingHorizontal: 50,
+                  paddingVertical: 8,
+                  color: "#296F63",
+                  marginTop: 20,
+                  fontFamily: "Poppins_300Light",
+                }}
+              >
+                Add amount
+              </Text>
+            </Pressable>
           </View>
         </View>
         <Recent />
       </View>
+      {/* </ScrollView> */}
     </SafeArea>
   );
 };

@@ -10,8 +10,13 @@ import React, { useState } from "react";
 import SafeArea from "../SafeArea";
 import Button from "../../components/button";
 import Input from "../../components/input";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import * as SecureStore from "expo-secure-store";
+import { fetchInvestorSuccess } from "../../store/actions/actionCreator";
 
 export default function registerInvestor({ navigation }) {
+  const dispatch = useDispatch();
   const [data, setData] = useState({});
   const [errors, setErr] = useState({});
   let [fontsLoaded, fontError] = useFonts({
@@ -66,7 +71,19 @@ export default function registerInvestor({ navigation }) {
       }
 
       if (valid) {
-        console.log(data);
+        const { data: investors } = await axios({
+          url:
+            "https://114f-180-241-183-225.ngrok-free.app/users/investors/register",
+          method: "post",
+          data,
+        });
+        const token = investors.access_token;
+        await SecureStore.setItemAsync("access_token", token);
+        await SecureStore.setItemAsync("role", "investor");
+        await SecureStore.setItemAsync("userId", investors.id);
+        // const value = await SecureStore.getItemAsync("role");
+        dispatch(fetchInvestorSuccess(investors.id, token, "investor"));
+        navigation.navigate("RootInvestor");
       }
     } catch (err) {
       console.log(err);

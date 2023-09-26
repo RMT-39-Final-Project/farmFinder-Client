@@ -1,4 +1,11 @@
-import { FlatList, StyleSheet, Text, View, Image } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  ScrollView,
+} from "react-native";
 import React, { useEffect } from "react";
 import SafeArea from "../SafeArea";
 import BackButton from "../../components/backButton";
@@ -56,16 +63,14 @@ export default function allFarm({ navigation }) {
         </Text>
         <Text></Text>
       </View>
-      <View style={{ alignItems: "center", flex: 1, justifyContent: "center" }}>
-        <FlatList
-          data={farms}
-          renderItem={({ item }) => {
+      <View style={{ alignItems: "center", flex: 1 }}>
+        <ScrollView stickyHeaderHiddenOnScroll={true}>
+          {farms.map((item) => {
             return (
               <View
                 style={{
                   backgroundColor: "white",
                   borderRadius: 10,
-                  marginRight: 20,
                   overflow: "hidden",
                   marginBottom: 20,
                   borderWidth: 1,
@@ -78,7 +83,7 @@ export default function allFarm({ navigation }) {
                     overflow: "hidden",
                     borderTopEndRadius: 10,
                     borderTopStartRadius: 10,
-                    width: 350,
+                    width: 370,
                     height: 150,
                     justifyContent: "center",
                   }}
@@ -145,9 +150,8 @@ export default function allFarm({ navigation }) {
                 </View>
               </View>
             );
-          }}
-          keyExtractor={(item) => item.id}
-        />
+          })}
+        </ScrollView>
       </View>
     </SafeArea>
   );

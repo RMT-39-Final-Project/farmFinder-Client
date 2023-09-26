@@ -11,9 +11,9 @@ import SafeArea from "../SafeArea";
 import Button from "../../components/button";
 import Input from "../../components/input";
 import axios from "axios";
-import Toast from "react-native-toast-message";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchInvestorSuccess } from "../../store/actions/actionCreator";
+import * as SecureStore from "expo-secure-store";
 
 const LoginInvest = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -62,20 +62,20 @@ const LoginInvest = ({ navigation }) => {
 
       if (valid) {
         const { data: investors } = await axios({
-          url: "https://088f-180-241-183-225.ngrok.io/users/investors/login",
+          url:
+            "https://114f-180-241-183-225.ngrok-free.app/users/investors/login",
           method: "post",
           data,
         });
-        const token = investors.access_token;
-        await AsyncStorage.multiSet([
-          ["access_token", token],
-          ["role", "investor"],
-        ]);
-        const value = await AsyncStorage.getItem("access_token");
-        dispatch(fetchInvestorSuccess(investors, token, "investor"));
-        if (value) navigation.push("investorHome");
+        const { access_token, id } = investors;
+        await SecureStore.setItemAsync("access_token", access_token);
+        await SecureStore.setItemAsync("role", "investor");
+        await SecureStore.setItemAsync("user", `${id}`);
+        dispatch(fetchInvestorSuccess(id, access_token, "investor"));
+        navigation.navigate("RootInvestor");
       }
     } catch (err) {
+      console.log(err);
       console.log(err.response.data.message);
     }
   };
