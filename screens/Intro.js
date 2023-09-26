@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, StyleSheet, Text, Image } from "react-native";
 import {
   useFonts,
@@ -8,12 +8,26 @@ import {
 import vector from "../assets/intro.png";
 import Button from "../components/button";
 import SafeArea from "./SafeArea";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useDispatch } from "react-redux";
+import { fetchInvestorSuccess } from "../store/actions/actionCreator";
 
 const Intro = ({ navigation }) => {
+  const dispatch = useDispatch();
   let [fontsLoaded, fontError] = useFonts({
     Poppins_300Light,
     Poppins_600SemiBold,
   });
+
+  //   useEffect(() => {
+  //     AsyncStorage.multiGet(["access_token", "role", "test"]).then((res) => {
+  //       if (res[0][1]) {
+  //         dispatch(fetchInvestorSuccess({}, res[0][1], res[1][1]));
+  //         navigation.navigate("investorHome");
+  //       }
+  //       console.log(res);
+  //     });
+  //   }, []);
 
   if (!fontsLoaded && !fontError) {
     return null;
@@ -40,7 +54,7 @@ const Intro = ({ navigation }) => {
       <View style={{ flex: 0.1 }}>
         <Button
           text={"Be a Farmer"}
-          pres={() => navigation.navigate("registerFarmer")}
+          pres={() => navigation.navigate("loginFarmer")}
           bg={"#A5D255"}
         />
       </View>
