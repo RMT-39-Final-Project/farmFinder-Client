@@ -7,6 +7,8 @@ import {
   Button,
   Alert,
   Image as RNImage,
+  StyleSheet,
+  TouchableOpacity
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import MapView, { Marker } from "react-native-maps";
@@ -179,8 +181,6 @@ const AddFarmForm = () => {
       return;
     }
 
-
-
     const formData = new FormData();
     formData.append("name", name);
     formData.append("category", category);
@@ -242,55 +242,74 @@ const AddFarmForm = () => {
       console.log(error);
       Alert.alert("Error", "An error occurred while adding the farm.");
     }
-
-    
   };
 
   return (
-    <ScrollView>
-      <View>
-        <Text>Farm Name</Text>
-        <TextInput onChangeText={setName} value={name} />
+    <ScrollView style={styles.container}>
+      <View style={styles.formContainer}>
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Farm Name</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={setName}
+            value={name}
+            placeholder="Enter Farm Name"
+          />
+        </View>
 
-        <Text>Category</Text>
-        <Picker
-          selectedValue={category}
-          onValueChange={(itemValue) => {
-            setCategory(itemValue);
-          }}
-        >
-          {categoryOptions.map((option) => (
-            <Picker.Item key={option} label={option} value={option} />
-          ))}
-        </Picker>
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Category</Text>
+          <Picker
+            style={styles.input}
+            selectedValue={category}
+            onValueChange={(itemValue) => {
+              setCategory(itemValue);
+            }}
+          >
+            {categoryOptions.map((option) => (
+              <Picker.Item key={option} label={option} value={option} />
+            ))}
+          </Picker>
+        </View>
 
-        <Text>City</Text>
-        <Picker
-          selectedValue={city}
-          onValueChange={(itemValue) => {
-            setCity(itemValue);
-          }}
-        >
-          {cityOptions.map((city) => (
-            <Picker.Item key={city} label={city} value={city} />
-          ))}
-        </Picker>
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>City</Text>
+          <Picker
+            style={styles.input}
+            selectedValue={city}
+            onValueChange={(itemValue) => {
+              setCity(itemValue);
+            }}
+          >
+            {cityOptions.map((city) => (
+              <Picker.Item key={city} label={city} value={city} />
+            ))}
+          </Picker>
+        </View>
 
-        <Text>Address (press search after finishing input)</Text>
-        <TextInput
-          onChangeText={(text) => {
-            setAddress(text);
-            setLatitude(null);
-            setLongitude(null);
-          }}
-          value={address}
-        />
-        <Text>Point to be displayed in page</Text>
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>
+            Address (press search after finishing input)
+          </Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(text) => {
+              setAddress(text);
+              setLatitude(null);
+              setLongitude(null);
+            }}
+            value={address}
+            placeholder="Enter Address"
+          />
+          <Button title="Search" onPress={handleSearchAddress} />
+        </View>
+
+        <View style={styles.map}>
         <MapView
           style={{ width: "100%", height: 200 }}
           initialRegion={{
-            latitude: -2.5489,
-            longitude: 118.0149,
+            latitude: -7.414219,
+            longitude: 110.536194,
             latitudeDelta: 10,
             longitudeDelta: 10,
           }}
@@ -304,71 +323,141 @@ const AddFarmForm = () => {
             />
           )}
         </MapView>
-        <Button title="Search" onPress={handleSearchAddress} />
+        </View>
 
-        <Text>Video URL (Youtube Link)</Text>
-        <TextInput onChangeText={setVideoUrl} value={videoUrl} />
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Video URL (Youtube Link)</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={setVideoUrl}
+            value={videoUrl}
+            placeholder="Enter Video URL"
+          />
+        </View>
 
-        <Text>Benefits</Text>
-        <TextInput onChangeText={setBenefits} value={benefits} />
+        {/* Benefits */}
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Benefits</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={setBenefits}
+            value={benefits}
+            placeholder="Enter Benefits"
+          />
+        </View>
 
-        <Text>Share Percent (range 1 - 100)</Text>
-        <TextInput
-          onChangeText={(text) => {
-            const parsedValue = parseInt(text);
-            if (!isNaN(parsedValue) && parsedValue >= 1 && parsedValue <= 100) {
-              setSharePercent(parsedValue.toString());
-            } else {
-              setSharePercent("");
-            }
-          }}
-          value={sharePercent}
-          placeholder="range 1 - 100"
-          keyboardType="numeric"
-        />
+        {/* Share Percent */}
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Share Percent (range 1 - 100)</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(text) => {
+              const parsedValue = parseInt(text);
+              if (!isNaN(parsedValue) && parsedValue >= 1 && parsedValue <= 100) {
+                setSharePercent(parsedValue.toString());
+              } else {
+                setSharePercent("");
+              }
+            }}
+            value={sharePercent}
+            placeholder="Enter Share Percent"
+            keyboardType="numeric"
+          />
+        </View>
 
-        <Text>Price in Rp</Text>
-        <TextInput
-          onChangeText={(text) => {
-            const parsedValue = parseInt(text);
-            if (!isNaN(parsedValue)) {
-              setPrice(parsedValue.toString());
-            } else {
-              setPrice("");
-            }
-          }}
-          value={price}
-          placeholder="Price per share in rupiah"
-          keyboardType="numeric"
-        />
-        <Button title="Pick Farm Photo" onPress={handleImagePicker} />
-        {photo && (
-          <View>
-            <RNImage
-              source={{ uri: photo }}
-              style={{ width: 200, height: 200 }}
-            />
-            <Button title="Delete" onPress={() => setPhoto(null)} />
-          </View>
-        )}
+        {/* Price */}
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Price in Rp</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={(text) => {
+              const parsedValue = parseInt(text);
+              if (!isNaN(parsedValue)) {
+                setPrice(parsedValue.toString());
+              } else {
+                setPrice("");
+              }
+            }}
+            value={price}
+            placeholder="Enter Price in Rp"
+            keyboardType="numeric"
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Farm Photo</Text>
+          <Button title="Pick Farm Photo" onPress={handleImagePicker} />
+          {photo && (
+            <View>
+              <RNImage source={{ uri: photo }} style={styles.image} />
+              <Button title="Delete" onPress={() => setPhoto(null)} />
+            </View>
+          )}
+        </View>
 
-        <Button
-          title="Pick Additional Images"
-          onPress={handleAdditionalImagePicker}
-        />
-        {additionalImages.map((image, index) => (
-          <View key={index}>
-            <RNImage
-              source={{ uri: image }}
-              style={{ width: 200, height: 200 }}
-            />
-            <Button title="Delete" onPress={() => handleDeleteImage(index)} />
-          </View>
-        ))}
+        {/* Additional Images */}
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Additional Images</Text>
+          <Button
+            title="Pick Additional Images"
+            onPress={handleAdditionalImagePicker}
+          />
+          {additionalImages.map((image, index) => (
+            <View key={index}>
+              <RNImage source={{ uri: image }} style={styles.image} />
+              <Button title="Delete" onPress={() => handleDeleteImage(index)} />
+            </View>
+          ))}
+        </View>
         <Button title="Submit" onPress={handleSubmit} />
       </View>
     </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+  },
+  formContainer: {
+    marginBottom: 16,
+  },
+  inputContainer: {
+    marginBottom: 16,
+  },
+  label: {
+    fontSize: 16,
+    marginBottom: 8,
+    fontWeight:"500"
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    padding: 8,
+    fontSize: 16,
+  },
+  image: {
+    width: 200,
+    height: 200,
+    marginTop: 8,
+  },
+  map: {
+    marginBottom: 10,
+    borderRadius: 10,
+    overflow: "hidden", 
+  },
+  Button: {
+    backgroundColor: "green", 
+    padding: 10,
+    borderRadius: 15,
+    alignItems: "center", 
+  },
+  ButtonLabel: {
+    color: "white", 
+    fontWeight: "bold",
+  },
+
+});
 
 export default AddFarmForm;
