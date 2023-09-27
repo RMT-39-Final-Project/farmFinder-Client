@@ -27,9 +27,12 @@ export default function allFarm({ navigation }) {
   const { farms } = useSelector((state) => {
     return state.farms;
   });
+  const { role } = useSelector((state) => {
+    return state.user;
+  });
 
   useEffect(() => {
-    dispatch(fetchFarmsSuccess());
+    dispatch(fetchFarmsSuccess(role));
   }, []);
   let [fontsLoaded, fontError] = useFonts({
     Poppins_300Light,

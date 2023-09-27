@@ -28,6 +28,9 @@ const InvestorHome = ({ navigation }) => {
   const { farms, loading } = useSelector((state) => {
     return state.farms;
   });
+  const { role } = useSelector((state) => {
+    return state.user;
+  });
   //   console.log(farms, "");
   const [search, setSearch] = useState("");
   const [err, setErr] = useState([]);
@@ -47,7 +50,7 @@ const InvestorHome = ({ navigation }) => {
   ];
 
   useEffect(() => {
-    dispatch(fetchFarmsSuccess());
+    dispatch(fetchFarmsSuccess(role));
   }, []);
 
   if (!fontsLoaded && !fontError) {

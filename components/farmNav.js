@@ -12,6 +12,7 @@ import {
   FontAwesome5,
 } from "@expo/vector-icons";
 import FarmerHome from "../screens/Farmer/FarmerHome";
+import Investment from "../screens/Farmer/investment";
 
 const Tab = createBottomTabNavigator();
 
@@ -37,11 +38,11 @@ const FarmNav = () => {
         />
         <Tab.Screen
           name="invest"
-          component={invest}
+          component={Investment}
           options={{
             tabBarActiveTintColor: "#296F63",
             headerShown: false,
-            title: "My Invest",
+            title: "Investments",
             tabBarIcon: ({ focused }) => {
               if (focused)
                 return (
@@ -57,25 +58,6 @@ const FarmNav = () => {
                   size={24}
                   color="black"
                 />
-              );
-            },
-          }}
-        />
-        <Tab.Screen
-          name="balance"
-          component={Balance}
-          options={{
-            tabBarActiveTintColor: "#296F63",
-            headerShown: false,
-            title: "Balance",
-            tabBarIcon: ({ focused }) => {
-              if (focused) {
-                return (
-                  <Ionicons name="md-card-outline" size={24} color="#296F63" />
-                );
-              }
-              return (
-                <Ionicons name="md-card-outline" size={24} color="black" />
               );
             },
           }}

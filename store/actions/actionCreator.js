@@ -37,19 +37,34 @@ export const farmsFetchFailed = (data) => {
   return { type: FARMS_FETCH_FAILED, payload: data };
 };
 
-export const fetchFarmsSuccess = () => {
+export const fetchFarmsSuccess = (role, token) => {
   return (dispatch) => {
     dispatch(farmsFetchRequest());
-    fetch(base_url + "farms")
-      .then((res) => res.json())
-      .then((data) => {
-        const action = { type: FARMS_FETCH_SUCCESS, payload: data };
-        dispatch(action);
+    if (role === "investor") {
+      fetch(base_url + "farms")
+        .then((res) => res.json())
+        .then((data) => {
+          const action = { type: FARMS_FETCH_SUCCESS, payload: data };
+          dispatch(action);
+        })
+        .catch((err) => {
+          console.log(err, ">>>> action");
+          dispatch(farmsFetchFailed(err));
+        });
+    } else if (role === "farmer") {
+      fetch(base_url + "farms/my-farms/farm", {
+        headers: { access_token: token },
       })
-      .catch((err) => {
-        console.log(err, ">>>> action");
-        dispatch(farmsFetchFailed(err));
-      });
+        .then((res) => res.json())
+        .then((data) => {
+          const action = { type: FARMS_FETCH_SUCCESS, payload: data };
+          dispatch(action);
+        })
+        .catch((err) => {
+          console.log(err, ">>>> action");
+          dispatch(farmsFetchFailed(err));
+        });
+    }
   };
 };
 
