@@ -12,7 +12,10 @@ import Button from "../../components/button";
 import Input from "../../components/input";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchInvestorSuccess } from "../../store/actions/actionCreator";
+import {
+  fetchInvestorSuccess,
+  fetchUserSuccess,
+} from "../../store/actions/actionCreator";
 import * as SecureStore from "expo-secure-store";
 
 const LoginInvest = ({ navigation }) => {
@@ -71,6 +74,7 @@ const LoginInvest = ({ navigation }) => {
         await SecureStore.setItemAsync("access_token", access_token);
         await SecureStore.setItemAsync("role", "investor");
         await SecureStore.setItemAsync("user", `${id}`);
+        dispatch(fetchUserSuccess(id, "investor"));
         dispatch(fetchInvestorSuccess(id, access_token, "investor"));
         navigation.navigate("RootInvestor");
       }

@@ -9,8 +9,16 @@ import Input from "../../components/input";
 import React, { useState } from "react";
 import SafeArea from "../SafeArea";
 import Button from "../../components/button";
+import * as SecureStore from "expo-secure-store";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import {
+  fetchInvestorSuccess,
+  fetchUserSuccess,
+} from "../../store/actions/actionCreator";
 
 export default function registerFarmer({ navigation }) {
+  const dispatch = useDispatch();
   const [data, setData] = useState({});
   const [errors, setErr] = useState({});
   let [fontsLoaded, fontError] = useFonts({
@@ -45,7 +53,7 @@ export default function registerFarmer({ navigation }) {
         handleError("Please input username", "username");
         valid = false;
       }
-      if (!data.username) {
+      if (!data.phoneNumber) {
         handleError("Please input phone number", "phoneNumber");
         valid = false;
       }
@@ -64,7 +72,17 @@ export default function registerFarmer({ navigation }) {
       }
 
       if (valid) {
-        console.log(data);
+        const { data: farmer } = await axios.post(
+          "https://114f-180-241-183-225.ngrok-free.app/users/farmers/register",
+          data
+        );
+        const token = farmer.access_token;
+        await SecureStore.setItemAsync("access_token", token);
+        await SecureStore.setItemAsync("role", "farmer");
+        await SecureStore.setItemAsync("user", `${farmer.id}`);
+        dispatch(fetchUserSuccess(farmer.id, "farmer"));
+        dispatch(fetchInvestorSuccess(farmer.id, token, "farmer"));
+        navigation.navigate("RootFarmer");
       }
     } catch (err) {
       console.log(err);
@@ -78,15 +96,15 @@ export default function registerFarmer({ navigation }) {
         <View style={{ marginBottom: 30 }}>
           <Text
             style={{
-              fontSize: 24,
+              fontSize: 32,
               fontFamily: "Poppins_700Bold",
               color: "#A5D255",
             }}
           >
-            Get Started
+            Hi there!
           </Text>
-          <Text style={{ fontSize: 26, fontFamily: "Poppins_300Light" }}>
-            by register here.
+          <Text style={{ fontSize: 20, fontFamily: "Poppins_300Light" }}>
+            Register yourself to become {"\n"} a lord of your own property.
           </Text>
         </View>
         <View style={{ marginBottom: 30 }}>
@@ -94,7 +112,7 @@ export default function registerFarmer({ navigation }) {
             bg={"#A5D255"}
             label="Username"
             onChangeText={(e) => {
-              onChange("email", e);
+              onChange("username", e);
             }}
             error={errors.username}
             onFocus={() => {
@@ -105,7 +123,7 @@ export default function registerFarmer({ navigation }) {
             bg={"#A5D255"}
             label="Phone number"
             onChangeText={(e) => {
-              onChange("email", e);
+              onChange("phoneNumber", e);
             }}
             error={errors.phoneNumber}
             onFocus={() => {

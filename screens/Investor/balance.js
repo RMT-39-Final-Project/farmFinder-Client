@@ -10,12 +10,13 @@ import {
 } from "@expo-google-fonts/poppins";
 import { Roboto_700Bold } from "@expo-google-fonts/roboto";
 import Recent from "../../components/balance/recent";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
+import { fetchUserSuccess } from "../../store/actions/actionCreator";
 
 const Balance = ({ navigation }) => {
-  const [user, setUser] = useState({});
-  const { userId } = useSelector((state) => {
+  const dispatch = useDispatch();
+  const { userId, role, user } = useSelector((state) => {
     return state.user;
   });
   let [fontsLoaded, fontError] = useFonts({
@@ -27,11 +28,8 @@ const Balance = ({ navigation }) => {
   });
 
   useEffect(() => {
-    axios
-      .get(
-        "https://114f-180-241-183-225.ngrok-free.app/users/investors/" + userId
-      )
-      .then(({ data }) => setUser(data));
+    if (role === "investor") dispatch(fetchUserSuccess(userId, role));
+    else dispatch(fetchUserSuccess(userId, role));
   }, []);
 
   if (!fontsLoaded && !fontError) {
@@ -73,21 +71,25 @@ const Balance = ({ navigation }) => {
               overflow: "hidden",
             }}
           >
-            <Pressable onPress={() => navigation.navigate("topup")}>
-              <Text
-                style={{
-                  backgroundColor: "#2D6A4F4D",
-                  fontSize: 20,
-                  paddingHorizontal: 50,
-                  paddingVertical: 8,
-                  color: "#296F63",
-                  marginTop: 20,
-                  fontFamily: "Poppins_300Light",
-                }}
-              >
-                Add amount
-              </Text>
-            </Pressable>
+            {role === "investor" ? (
+              <Pressable onPress={() => navigation.navigate("topup")}>
+                <Text
+                  style={{
+                    backgroundColor: "#2D6A4F4D",
+                    fontSize: 20,
+                    paddingHorizontal: 50,
+                    paddingVertical: 8,
+                    color: "#296F63",
+                    marginTop: 20,
+                    fontFamily: "Poppins_300Light",
+                  }}
+                >
+                  Add amount
+                </Text>
+              </Pressable>
+            ) : (
+              <Text></Text>
+            )}
           </View>
         </View>
         <Recent />

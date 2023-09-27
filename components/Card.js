@@ -23,17 +23,21 @@ export default function CardItem({ item }) {
         backgroundColor: "white",
         borderRadius: 10,
         marginRight: 20,
-        overflow: "hidden",
+        // overflow: "hidden",
         borderWidth: 1,
+        padding: 10,
         borderColor: "#296F63",
         position: "relative",
+        shadowColor: "#171717",
+        shadowOffset: { width: -2, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 5,
       }}
     >
       <View
         style={{
           overflow: "hidden",
-          borderTopEndRadius: 10,
-          borderTopStartRadius: 10,
+          borderRadius: 10,
           width: 300,
           height: 150,
           justifyContent: "center",
@@ -51,21 +55,28 @@ export default function CardItem({ item }) {
           }}
         />
       </View>
-      <Text
+      <View
         style={{
           position: "absolute",
-          right: 5,
-          top: 5,
-          fontSize: 12,
-          borderRadius: 10,
-          backgroundColor: "#296F63",
-          color: "white",
-          paddingHorizontal: 10,
-          paddingVertical: 5,
+          right: 20,
+          top: 18,
+          borderRadius: 5,
+          overflow: "hidden",
         }}
       >
-        {item.category}
-      </Text>
+        <Text
+          style={{
+            fontSize: 14,
+            borderRadius: 10,
+            backgroundColor: "#296F63",
+            color: "white",
+            paddingHorizontal: 10,
+            paddingVertical: 5,
+          }}
+        >
+          {item.category.split("-").join(" ")}
+        </Text>
+      </View>
       <View style={{ paddingHorizontal: 17, paddingTop: 5, paddingBottom: 15 }}>
         <View
           style={{

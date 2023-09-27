@@ -9,8 +9,16 @@ import {
 } from "@expo-google-fonts/poppins";
 import React, { useState } from "react";
 import SafeArea from "../SafeArea";
+import axios from "axios";
+import { useDispatch } from "react-redux";
+import * as SecureStore from "expo-secure-store";
+import {
+  fetchInvestorSuccess,
+  fetchUserSuccess,
+} from "../../store/actions/actionCreator";
 
 export default function loginFarmer({ navigation }) {
+  const dispatch = useDispatch();
   const [data, setData] = useState({});
   const [errors, setErr] = useState({});
   let [fontsLoaded, fontError] = useFonts({
@@ -55,7 +63,17 @@ export default function loginFarmer({ navigation }) {
       }
 
       if (valid) {
-        console.log(data);
+        const { data: farmer } = await axios.post(
+          "https://114f-180-241-183-225.ngrok-free.app/users/farmers/login",
+          data
+        );
+        const { access_token, id } = farmer;
+        await SecureStore.setItemAsync("access_token", access_token);
+        await SecureStore.setItemAsync("role", "farmer");
+        await SecureStore.setItemAsync("user", `${id}`);
+        dispatch(fetchUserSuccess(id, "farmer"));
+        dispatch(fetchInvestorSuccess(id, access_token, "farmer"));
+        navigation.navigate("RootFarmer");
       }
     } catch (err) {
       console.log(err);
@@ -74,10 +92,10 @@ export default function loginFarmer({ navigation }) {
               color: "#A5D255",
             }}
           >
-            Welcome home
+            Welcome home chief!
           </Text>
           <Text style={{ fontSize: 26, fontFamily: "Poppins_300Light" }}>
-            glad you still alive.
+            Help me to take care of {"\n"} your property.
           </Text>
         </View>
         <View style={{ marginBottom: 30 }}>

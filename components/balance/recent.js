@@ -10,13 +10,21 @@ import {
 import { Roboto_700Bold } from "@expo-google-fonts/roboto";
 import RecentList from "./recentList";
 import axios from "axios";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  fetchBalanceSuccess,
+  fetchUserSuccess,
+} from "../../store/actions/actionCreator";
 
 const Recent = () => {
-  const { access_token } = useSelector((state) => {
+  const dispatch = useDispatch();
+  const { access_token, role, userId } = useSelector((state) => {
     return state.user;
   });
-  const [recent, setRecent] = useState([]);
+  const { recent } = useSelector((state) => {
+    return state.balance;
+  });
+  //   const [recent, setRecent] = useState([]);
   let [fontsLoaded, fontError] = useFonts({
     Poppins_300Light,
     Poppins_600SemiBold,
@@ -25,33 +33,42 @@ const Recent = () => {
     Roboto_700Bold,
   });
   useEffect(() => {
-    axios
-      .get("https://114f-180-241-183-225.ngrok-free.app/balances", {
-        headers: { access_token },
-      })
-      .then(({ data }) => setRecent(data));
+    dispatch(fetchBalanceSuccess(access_token));
+    // if (role === "investor") dispatch(fetchUserSuccess(userId, role));
+    // if (role === "farmer") dispatch(fetchUserSuccess(userId, role));
   }, []);
   if (!fontsLoaded && !fontError) {
     return null;
   }
   return (
-    <View style={{}}>
-      <Text
-        style={{
-          fontSize: 22,
-          fontFamily: "Poppins_600SemiBold",
-          color: "#296F63",
-          marginBottom: 40,
-        }}
-      >
-        Recent Activities
-      </Text>
-      <ScrollView>
-        {recent.map((el) => {
-          return <RecentList item={el} />;
-        })}
-      </ScrollView>
-    </View>
+    // <View style={{ flex: 0.4 }}>
+    <>
+      {role === "investor" ? (
+        <>
+          <Text
+            style={{
+              fontSize: 22,
+              fontFamily: "Poppins_600SemiBold",
+              color: "#296F63",
+              marginBottom: 40,
+            }}
+          >
+            Recent Activities
+          </Text>
+          <ScrollView
+            style={{ marginBottom: 180 }}
+            showsHorizontalScrollIndicator={false}
+          >
+            {recent.map((el) => {
+              return <RecentList item={el} />;
+            })}
+          </ScrollView>
+        </>
+      ) : (
+        <Text></Text>
+      )}
+    </>
+    // </View>
   );
 };
 

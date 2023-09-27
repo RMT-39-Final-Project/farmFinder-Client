@@ -20,7 +20,7 @@ import Input from "../../components/input";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchFarmsSuccess } from "../../store/actions/actionCreator";
 import CardItem from "../../components/Card";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 import CategoryListItem from "../../components/CategoryListItem";
 
 const InvestorHome = ({ navigation }) => {
@@ -28,7 +28,9 @@ const InvestorHome = ({ navigation }) => {
   const { farms, loading } = useSelector((state) => {
     return state.farms;
   });
+  //   console.log(farms, "");
   const [search, setSearch] = useState("");
+  const [err, setErr] = useState([]);
   let [fontsLoaded, fontError] = useFonts({
     Poppins_300Light,
     Poppins_600SemiBold,
@@ -60,7 +62,34 @@ const InvestorHome = ({ navigation }) => {
     );
   }
 
-  const handleSearch = () => {};
+  const handleSearch = async () => {
+    try {
+      let valid = true;
+      if (!search) {
+        handleError("search", "Please input search");
+        valid = false;
+      }
+
+      if (valid) {
+        const { data } = await axios(
+          "https://114f-180-241-183-225.ngrok-free.app/farms?city=" + search
+        );
+        navigation.push("filter", {
+          filter: search,
+          data,
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleError = (name, msg) => {
+    setErr((prev) => ({
+      ...prev,
+      [name]: msg,
+    }));
+  };
 
   return (
     <SafeArea>
@@ -98,7 +127,11 @@ const InvestorHome = ({ navigation }) => {
               label={"Search"}
               bg={"#296F63"}
               placeholder={"Search by city"}
+              error={err.search}
               onChangeText={(e) => setSearch(e)}
+              onFocus={() => {
+                handleError("search", null);
+              }}
             />
           </View>
           <View
@@ -170,7 +203,19 @@ const InvestorHome = ({ navigation }) => {
               showsHorizontalScrollIndicator={false}
               data={farms}
               horizontal={true}
-              renderItem={({ item }) => <CardItem item={item} />}
+              renderItem={({ item }) => {
+                return (
+                  <Pressable
+                    onPress={() =>
+                      navigation.push("detailFarm", {
+                        farmId: item.id,
+                      })
+                    }
+                  >
+                    <CardItem item={item} />
+                  </Pressable>
+                );
+              }}
               keyExtractor={(item) => item.id}
             />
           </View>
@@ -185,29 +230,8 @@ const InvestorHome = ({ navigation }) => {
           >
             Categories
           </Text>
-          <View style={{ marginTop: 10 }}>
-            {categoryOptions.map((el, id) => {
-              return (
-                <View
-                  style={{
-                    flex: 1,
-                    backgroundColor: "white",
-                    borderWidth: 1,
-                    borderColor: "#296F63",
-                    marginBottom: 10,
-                    alignItems: "center",
-                    paddingVertical: 15,
-                    borderRadius: 5,
-                  }}
-                >
-                  <Text
-                    style={{ fontSize: 16, fontFamily: "Poppins_500Medium" }}
-                  >
-                    {el}
-                  </Text>
-                </View>
-              );
-            })}
+          <View style={{ marginTop: 30 }}>
+            <CategoryListItem navigation={navigation} />
           </View>
         </View>
       </ScrollView>

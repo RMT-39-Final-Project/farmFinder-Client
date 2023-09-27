@@ -5,6 +5,7 @@ import {
   View,
   Image,
   ScrollView,
+  Pressable,
 } from "react-native";
 import React, { useEffect } from "react";
 import SafeArea from "../SafeArea";
@@ -57,6 +58,7 @@ export default function allFarm({ navigation }) {
             fontSize: 24,
             color: "#296F63",
             fontFamily: "Roboto_700Bold",
+            marginLeft: -20,
           }}
         >
           Farms
@@ -65,92 +67,115 @@ export default function allFarm({ navigation }) {
       </View>
       <View style={{ alignItems: "center", flex: 1 }}>
         <ScrollView stickyHeaderHiddenOnScroll={true}>
-          {farms.map((item) => {
-            return (
-              <View
-                style={{
-                  backgroundColor: "white",
-                  borderRadius: 10,
-                  overflow: "hidden",
-                  marginBottom: 20,
-                  borderWidth: 1,
-                  borderColor: "#296F63",
-                  position: "relative",
-                }}
-              >
-                <View
-                  style={{
-                    overflow: "hidden",
-                    borderTopEndRadius: 10,
-                    borderTopStartRadius: 10,
-                    width: 370,
-                    height: 150,
-                    justifyContent: "center",
-                  }}
-                >
-                  <Image
-                    style={{
-                      width: 450,
-                      height: 300,
-                      resizeMode: "contain",
-                      borderRadius: 20,
-                    }}
-                    source={{
-                      uri: `${item.mainImgUrl}`,
-                    }}
-                  />
-                </View>
-                <Text
-                  style={{
-                    position: "absolute",
-                    right: 5,
-                    top: 5,
-                    fontSize: 12,
-                    borderRadius: 10,
-                    backgroundColor: "#296F63",
-                    color: "white",
-                    paddingHorizontal: 10,
-                    paddingVertical: 5,
-                  }}
-                >
-                  {item.category}
-                </Text>
-                <View
-                  style={{
-                    paddingHorizontal: 17,
-                    paddingTop: 5,
-                    paddingBottom: 15,
-                  }}
+          {farms ? (
+            farms.map((item) => {
+              return (
+                <Pressable
+                  onPress={() =>
+                    navigation.push("detailFarm", {
+                      farmId: item.id,
+                    })
+                  }
                 >
                   <View
                     style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      marginTop: 10,
-                      alignItems: "flex-start",
+                      backgroundColor: "white",
+                      borderRadius: 10,
+                      // overflow: "hidden",
+                      borderWidth: 1,
+                      padding: 10,
+                      borderColor: "#296F63",
+                      position: "relative",
+                      marginBottom: 20,
                     }}
                   >
-                    <View>
+                    <View
+                      style={{
+                        overflow: "hidden",
+                        borderRadius: 10,
+                        width: 370,
+                        height: 150,
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Image
+                        style={{
+                          width: 450,
+                          height: 300,
+                          resizeMode: "contain",
+                          borderRadius: 20,
+                        }}
+                        source={{
+                          uri: `${item.mainImgUrl}`,
+                        }}
+                      />
+                    </View>
+                    <View
+                      style={{
+                        position: "absolute",
+                        right: 25,
+                        top: 20,
+                        borderRadius: 5,
+                        overflow: "hidden",
+                      }}
+                    >
                       <Text
                         style={{
-                          fontSize: 16,
-                          fontFamily: "Poppins_600SemiBold",
+                          fontSize: 14,
+                          borderRadius: 10,
+                          backgroundColor: "#296F63",
+                          color: "white",
+                          paddingHorizontal: 10,
+                          paddingVertical: 10,
+                          fontFamily: "Poppins_500Medium",
                         }}
                       >
-                        {item.name}
+                        {item.category.split("-").join(" ")}
                       </Text>
-                      <Text>{item.city}</Text>
                     </View>
-                    <Text
-                      style={{ fontSize: 16, fontFamily: "Poppins_500Medium" }}
+                    <View
+                      style={{
+                        paddingHorizontal: 17,
+                        paddingTop: 5,
+                        paddingBottom: 15,
+                      }}
                     >
-                      Rp. {item.price}
-                    </Text>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          marginTop: 10,
+                          alignItems: "flex-start",
+                        }}
+                      >
+                        <View>
+                          <Text
+                            style={{
+                              fontSize: 16,
+                              fontFamily: "Poppins_600SemiBold",
+                            }}
+                          >
+                            {item.name}
+                          </Text>
+                          <Text>{item.city}</Text>
+                        </View>
+                        <Text
+                          style={{
+                            fontSize: 16,
+                            fontFamily: "Poppins_500Medium",
+                          }}
+                        >
+                          Rp. {item.price}
+                        </Text>
+                      </View>
+                    </View>
                   </View>
-                </View>
-              </View>
-            );
-          })}
+                </Pressable>
+              );
+            })
+          ) : (
+            <Text>Farms is not found</Text>
+          )}
         </ScrollView>
       </View>
     </SafeArea>

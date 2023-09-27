@@ -13,7 +13,10 @@ import Input from "../../components/input";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import * as SecureStore from "expo-secure-store";
-import { fetchInvestorSuccess } from "../../store/actions/actionCreator";
+import {
+  fetchInvestorSuccess,
+  fetchUserSuccess,
+} from "../../store/actions/actionCreator";
 
 export default function registerInvestor({ navigation }) {
   const dispatch = useDispatch();
@@ -77,12 +80,12 @@ export default function registerInvestor({ navigation }) {
           method: "post",
           data,
         });
-        const token = investors.access_token;
-        await SecureStore.setItemAsync("access_token", token);
+        const { access_token, id } = investors;
+        await SecureStore.setItemAsync("access_token", access_token);
         await SecureStore.setItemAsync("role", "investor");
-        await SecureStore.setItemAsync("userId", investors.id);
-        // const value = await SecureStore.getItemAsync("role");
-        dispatch(fetchInvestorSuccess(investors.id, token, "investor"));
+        await SecureStore.setItemAsync("user", `${id}`);
+        dispatch(fetchUserSuccess(id, "investor"));
+        dispatch(fetchInvestorSuccess(id, access_token, "investor"));
         navigation.navigate("RootInvestor");
       }
     } catch (err) {
