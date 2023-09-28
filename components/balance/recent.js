@@ -57,7 +57,7 @@ const Recent = () => {
           </Text>
           <ScrollView
             style={{ marginBottom: 180 }}
-            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
           >
             {recent.map((el) => {
               return <RecentList item={el} />;

@@ -7,6 +7,7 @@ import {
   INVEST_FETCH_SUCCESS,
   BALANCE_FETCH_SUCCESS,
   USER_FETCH_SUCCESS,
+  FARMS_FETCH_BYVERIFIED_SUCCESS,
 } from "./actionType";
 import axios from "axios";
 
@@ -113,6 +114,20 @@ export const fetchBalanceSuccess = (token) => {
       .then((res) => res.json())
       .then((data) => {
         const action = { type: BALANCE_FETCH_SUCCESS, recent: data };
+        dispatch(action);
+      })
+      .catch((err) => console.log(err));
+  };
+};
+
+export const fetchFarmsVerifiedSuccess = (token) => {
+  return (dispatch) => {
+    fetch(base_url + "farms/my-farms/farms", {
+      headers: { access_token: token },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        const action = { type: FARMS_FETCH_BYVERIFIED_SUCCESS, verified: data };
         dispatch(action);
       })
       .catch((err) => console.log(err));

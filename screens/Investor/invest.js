@@ -42,7 +42,7 @@ export default function invest() {
   console.log(data, loading);
   return (
     <SafeArea>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ paddingHorizontal: 2 }}>
           <View style={{ marginTop: 20, marginBottom: 25 }}>
             <Text
