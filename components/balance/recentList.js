@@ -32,71 +32,62 @@ const RecentList = ({ item }) => {
             justifyContent: "space-between",
             marginBottom: 15,
             paddingHorizontal: 15,
+            paddingVertical: 15,
             alignItems: "center",
           }}
         >
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            {/* <Image
-              source={vector}
-              style={{ width: 55, height: 55, marginRight: 10 }}
-            /> */}
-            <View>
-              {item.status === "success" || item.status === "minus" ? (
-                <>
-                  <Text
-                    style={{
-                      fontSize: 20,
-                      fontFamily: "Roboto_700Bold",
-                      color: "#2D6A4F",
-                    }}
-                  >
-                    {item.status === "minus"
-                      ? "Successful Investment"
-                      : "Top up Successfully"}
-                  </Text>
-                </>
-              ) : (
-                <>
-                  <Text
-                    style={{
-                      fontSize: 19,
-                      fontFamily: "Roboto_700Bold",
-                      color: "#7A0021",
-                    }}
-                  >
-                    Failed Investment
-                  </Text>
-                </>
-              )}
-              <Text style={{ fontFamily: "Poppins_300Light" }}>
-                {item?.ownership}
-              </Text>
-            </View>
-          </View>
-          {item.status === "success" || item.status === "minus" ? (
+          {/* <View> */}
+          {item.status !== "failed" ? (
             <Text
               style={{
-                fontSize: 18,
+                fontSize: 20,
                 fontFamily: "Roboto_700Bold",
                 color: "#2D6A4F",
+                // marginBottom: -20,
               }}
             >
               {item.status === "minus"
-                ? `- Rp. ${item.balance},00`
-                : `
-              Rp. ${item.balance},00`}
+                ? "Successful Investment"
+                : "Top up Successfully"}
             </Text>
           ) : (
             <Text
               style={{
-                fontSize: 18,
+                fontSize: 20,
                 fontFamily: "Roboto_700Bold",
                 color: "#7A0021",
+                // marginBottom: -20,
               }}
             >
-              - Rp. {item.balance},00
+              Failed Investment
             </Text>
           )}
+          {/* </View> */}
+          <View>
+            {item.status === "success" || item.status === "minus" ? (
+              <Text
+                style={{
+                  fontSize: 18,
+                  fontFamily: "Roboto_700Bold",
+                  color: "#2D6A4F",
+                }}
+              >
+                {item.status === "minus"
+                  ? `- Rp. ${item.balance},00`
+                  : `Rp. ${item.balance},00`}
+              </Text>
+            ) : (
+              <Text
+                style={{
+                  fontSize: 18,
+                  fontFamily: "Roboto_700Bold",
+                  color: "#7A0021",
+                }}
+              >
+                - Rp. {item.balance},00
+              </Text>
+            )}
+          </View>
         </View>
         <Divider bold={true} />
       </View>

@@ -96,14 +96,14 @@ export default function allFarm({ navigation }) {
                       style={{
                         overflow: "hidden",
                         borderRadius: 10,
-                        width: 370,
+                        width: 330,
                         height: 150,
                         justifyContent: "center",
                       }}
                     >
                       <Image
                         style={{
-                          width: 450,
+                          width: "auto",
                           height: 300,
                           resizeMode: "contain",
                           borderRadius: 20,

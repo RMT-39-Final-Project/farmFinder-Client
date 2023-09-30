@@ -56,12 +56,14 @@ const Recent = () => {
             Recent Activities
           </Text>
           <ScrollView
-            style={{ marginBottom: 180 }}
+            style={{ marginBottom: 40 }}
             showsVerticalScrollIndicator={false}
           >
-            {recent.map((el) => {
-              return <RecentList item={el} />;
-            })}
+            <View style={{ flex: 1, paddingBottom: 150 }}>
+              {recent.map((el) => {
+                return <RecentList item={el} />;
+              })}
+            </View>
           </ScrollView>
         </>
       ) : (
